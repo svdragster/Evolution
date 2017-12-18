@@ -24,9 +24,18 @@ public class Main extends ApplicationAdapter {
 	
 	
 	// Perceptron stuff
-	Perceptron perceptron = new Perceptron();
+	Perceptron perceptron = new Perceptron(3);
 	
-	Point[] points = new Point[200];
+	Point[] points = new Point[3000];
+	
+	private float lineX1 = -1;
+	private float lineY1 = someFunction(lineX1);
+	private float lineX2 = 1;
+	private float lineY2 = someFunction(lineX2);
+	
+	public float someFunction(float x) {
+		return -0.65f * x - 0.1245f;
+	}
 	
 	@Override
 	public void create () {
@@ -52,7 +61,7 @@ public class Main extends ApplicationAdapter {
 		for (Point p : points) {
 			p.show();
 		}
-		for (Point p : points) {
+		/*for (Point p : points) {
 			float[] input = new float[]{
 					p.getX(),
 					p.getY()
@@ -64,13 +73,13 @@ public class Main extends ApplicationAdapter {
 			} else {
 				addDot(p.getX(), p.getY(), 101);
 			}
-		}
+		}*/
 		
 		
 		
-		float[] inputs = new float[]{-1, 0.5f};
-		int result = perceptron.guess(inputs);
-		System.out.println(result);
+		//float[] inputs = new float[]{-1, 0.5f, 1};
+		//int result = perceptron.guess(inputs);
+		//System.out.println(result);
 		
 		/////////////////////
 	}
@@ -91,7 +100,13 @@ public class Main extends ApplicationAdapter {
 		
 		// line
 		renderer.setColor(0.00f, 0.0f, 0.05f, 1);
-		renderer.line(0, 0, 500, 500);
+		renderer.line((lineX1+1)*Point.WIDTH/2, (lineY1+1)*Point.HEIGHT/2, (lineX2+1)*Point.WIDTH/2, (lineY2+1)*Point.HEIGHT/2);
+		
+		renderer.setColor(1f, 1f, 1f, 1);
+		renderer.line((lineX1+1)*Point.WIDTH/2,
+				(perceptron.guessY(lineX1)+1)*Point.HEIGHT/2,
+				(lineX2+1)*Point.WIDTH/2,
+				(perceptron.guessY(lineX2)+1)*Point.HEIGHT/2);
 		
 		for (Entity entity : entities) {
 			entity.render(renderer);
@@ -109,16 +124,17 @@ public class Main extends ApplicationAdapter {
 		for (Point p : points) {
 			float[] input = new float[] {
 					p.getX(),
-					p.getY()
+					p.getY(),
+					p.getBias()
 			};
 			perceptron.train(input,
 					p.getLabel());
 			
 			int guess = perceptron.guess(input);
 			if (guess == p.getLabel()) {
-				addDot(p.getX(), p.getY(), 100);
+				addDot(p.getMappedX(), p.getMappedY(), 100);
 			} else {
-				addDot(p.getX(), p.getY(), 101);
+				addDot(p.getMappedX(), p.getMappedY(), 101);
 			}
 		}
 		

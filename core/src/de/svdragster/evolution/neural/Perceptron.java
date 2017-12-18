@@ -20,11 +20,12 @@ public class Perceptron {
 	
 	
 	
-	private float[] weights = new float[2];
+	private float[] weights;
 	
-	private float learningRate = 0.01f;
+	private float learningRate = 0.000001f;
 	
-	public Perceptron() {
+	public Perceptron(int weightAmount) {
+		weights = new float[weightAmount];
 		for (int i=0; i<weights.length; i++) {
 			weights[i] = random.nextFloat()*2-1;
 		}
@@ -36,6 +37,17 @@ public class Perceptron {
 			sum += inputs[i] * weights[i];
 		}
 		return (int) Math.signum(sum);
+	}
+	
+	public float guessY(float x) {
+		/*float m = weights[1] / weights[0];
+		float b = weights[2];
+		return m * x + b;*/
+		float w0 = weights[0];
+		float w1 = weights[1];
+		float w2 = weights[2];
+		
+		return -(w2/w1) - (w0/w1) * x;
 	}
 	
 	public void train(float[] inputs, int target) {

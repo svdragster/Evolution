@@ -21,6 +21,8 @@ public class EntityDot extends Entity {
 	
 	@Override
 	public void render(ShapeRenderer renderer) {
+		float x = this.x;
+		float y = this.y;
 		if (color == 100) {
 			renderer.setColor(1f, 1f, 1f, 1);
 			renderer.circle(x, y, 2);
